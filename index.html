@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo en Casa</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bingo en Casa</h1>
+        <div id="currentNumber" class="numberDisplay">Presiona "Nueva Partida" para empezar</div>
+        <button id="newGameButton">Nueva Partida</button>
+        <button id="startGameButton">Empezar</button>
+        <button id="pauseButton">Pausar</button>
+        <button id="resumeButton">Reanudar</button>
+        <button id="bingoButton">¡Bingo!</button>
+        <div id="calledNumbers"></div>
+        <div id="bingoBoard">
+            <div class="bingoHeader">B</div>
+            <div class="bingoHeader">I</div>
+            <div class="bingoHeader">N</div>
+            <div class="bingoHeader">G</div>
+            <div class="bingoHeader">O</div>
+            <div class="bingoColumn" id="columnB"></div>
+            <div class="bingoColumn" id="columnI"></div>
+            <div class="bingoColumn" id="columnN"></div>
+            <div class="bingoColumn" id="columnG"></div>
+            <div class="bingoColumn" id="columnO"></div>
+        </div>
+    </div>
+    <audio id="bingoSong" src="bingo-winner.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
