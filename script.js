@@ -2,6 +2,36 @@ let numbers = [];
 let calledNumbers = [];
 let intervalId;
 let isPaused = false;
+let selectedVoice; // Almacenará la voz seleccionada
+
+// Función para llenar el selector de voz
+function populateVoiceList() {
+    const voices = window.speechSynthesis.getVoices();
+    const voiceSelect = document.getElementById('voiceSelect');
+    
+    voiceSelect.innerHTML = '';
+    voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+    });
+
+    // Seleccionar la primera voz por defecto
+    selectedVoice = voices[0];
+}
+
+function setVoice(msg) {
+    const voices = window.speechSynthesis.getVoices();
+    msg.voice = selectedVoice || voices[0];
+}
+
+window.speechSynthesis.onvoiceschanged = populateVoiceList;
+
+document.getElementById('voiceSelect').addEventListener('change', function() {
+    const voices = window.speechSynthesis.getVoices();
+    selectedVoice = voices[this.value];
+});
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -31,7 +61,7 @@ function startGame() {
         if (intervalId) {
             clearInterval(intervalId);
         }
-        intervalId = setInterval(drawNumber, 5000); // Cambia 5000 por el intervalo deseado en milisegundos
+        intervalId = setInterval(drawNumber, 7000); // Cambia 7000 por el intervalo deseado en milisegundos (7 segundos)
     } else {
         alert("¡El juego ya ha comenzado!");
     }
@@ -71,15 +101,24 @@ function speakNumber(number) {
     const msg2 = new SpeechSynthesisUtterance(`${letter} ${number}`);
     msg1.lang = "es-ES";
     msg2.lang = "es-ES";
+
+    // Configura la voz basada en la selección del usuario
+    setVoice(msg1);
+    setVoice(msg2);
+
     window.speechSynthesis.speak(msg1);
     setTimeout(() => {
         window.speechSynthesis.speak(msg2);
-    }, 2000);
+    }, 1000);
 }
 
 function speakPhrase(phrase) {
     const msg = new SpeechSynthesisUtterance(phrase);
     msg.lang = "es-ES";
+
+    // Configura la voz basada en la selección del usuario
+    setVoice(msg);
+
     window.speechSynthesis.speak(msg);
 }
 
@@ -157,10 +196,16 @@ function announceBingo() {
     }
 }
 
+document.getElementById("voiceSelect").addEventListener("change", function() {
+    const voices = window.speechSynthesis.getVoices();
+    selectedVoice = voices[this.value];
+});
+
 document.getElementById("newGameButton").addEventListener("click", startNewGame);
 document.getElementById("startGameButton").addEventListener("click", startGame);
 document.getElementById("pauseButton").addEventListener("click", pauseGame);
 document.getElementById("resumeButton").addEventListener("click", resumeGame);
 document.getElementById("bingoButton").addEventListener("click", announceBingo);
 
+window.speechSynthesis.onvoiceschanged = populateVoiceList;
 createBingoBoard();
